@@ -1,5 +1,9 @@
 
 const transactionUL = document.querySelector('#transactions')//recupera a ul da dom
+const incomeDisplay = document.querySelector('#money-plus')//pega o p da dom para mostra a receita
+const expenseDisplay = document.querySelector('#money-minus')//pega o p da dom para mostra a despesas
+const balanceDisplay = document.querySelector('#balance')//pega o h1 da dom para mostra o saldo total
+console.log({incomeDisplay, expenseDisplay,balanceDisplay})
 const dummyTransactions = [
     {id:1, nome: 'Bolo de brigadeiro',amount:-20},
     {id:2, nome: 'Salário',amount:300},
@@ -25,9 +29,23 @@ const addtransactionIntoDom = transaction =>{
     
 }
 const updateBalanceValues = () =>{
-    const transactonsAmounts = dummyTransactions.map(transaction => transaction.amount);
-    const total = transactonsAmounts.reduce((accumulator, transaction) => accumulator + transaction,0).toFixed(2)
-    console.log(total)
+    const transactonsAmounts = dummyTransactions
+          .map(transaction => transaction.amount);
+    const total = transactonsAmounts
+          .reduce((accumulator, transaction) => accumulator + transaction,0)
+          .toFixed(2);//aqui o valor total saldo
+    const income = transactonsAmounts
+          .filter(value => value > 0)
+          .reduce((accumulator, value) => accumulator + value,0)
+          .toFixed(2);//aqui a saldo total da receitas
+    const  expense = transactonsAmounts
+           .filter(value => value < 0 )
+           .reduce((accumulator, value) => accumulator + value,0)
+           .toFixed(2);
+           balanceDisplay.textContent =`R$ ${total}`;
+           incomeDisplay.textContent = `R$ ${income}`;
+           expenseDisplay.textContent =`R$ ${Math.abs(expense)}`;
+    console.log(expense)
 
 }
  const init = () =>{
