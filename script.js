@@ -18,14 +18,18 @@ const inputTransactionAmount = document.querySelector('#amount')
 //     'domingo','segunda','terça','quarta','quinta','sexta','sábado'
 //    );
 // console.log(dias[datas.dia])
-let dummyTransactions = [
-    {id:1, nome: 'Bolo de brigadeiro',amount:-20},
-    {id:2, nome: 'Salário',amount:300},
-    {id:3, nome: 'Torta de frango',amount:-10},
-    {id:4, nome: 'Violão',amount:150}
-]
+// let transactions = [
+//     {id:1, nome: 'Bolo de brigadeiro',amount:-20},
+//     {id:2, nome: 'Salário',amount:300},
+//     {id:3, nome: 'Torta de frango',amount:-10},
+//     {id:4, nome: 'Violão',amount:150}
+// ]
+const localStorageTransactions = JSON.parse(localStorage.getItem('transactions'));
+let transactions = localStorage.getItem('transactions') !== null ? localStorageTransactions : []
+
 const removeTransaction = ID =>{
-    dummyTransactions = dummyTransactions.filter(transaction => transaction.id !== ID)
+    transactions = transactions.filter(transaction => transaction.id !== ID)
+    updateLocalStorage()
     init()
    
 }
@@ -52,7 +56,7 @@ const addtransactionIntoDom = transaction =>{
     
 }
 const updateBalanceValues = () =>{
-    const transactonsAmounts = dummyTransactions
+    const transactonsAmounts = transactions
           .map(transaction => transaction.amount);
     const total = transactonsAmounts
           .reduce((accumulator, transaction) => accumulator + transaction,0)
@@ -73,12 +77,16 @@ const updateBalanceValues = () =>{
 }
  const init = () =>{
     transactionUL.innerHTML ='';
-     dummyTransactions.forEach(addtransactionIntoDom);
+     transactions.forEach(addtransactionIntoDom);
      updateBalanceValues()
  }
 //responsavél para inicializar os dados na tela
 init();
-const generateID = ()=> Math.round(Math.random() * 1000);
+const  updateLocalStorage = () =>{
+     localStorage.setItem('transactions',JSON.stringify(transactions)) //salva os dados no localStorage mas
+                                                                          // antes transforma os dados em uma string
+}
+const generateID = ()=> Math.round(Math.random() * 1000);//gera id 
 
 //evento que vai ouvir o form e fazer a validação dele
 form.addEventListener('submit', event =>{
@@ -95,8 +103,9 @@ form.addEventListener('submit', event =>{
      nome: transactionName ,
      amount: Number(transactionAmount)//transformando a string que vem do form em numero poderia ser o sinal de +
     };
- dummyTransactions.push(transaction);
+ transactions.push(transaction);
  init()   
+ updateLocalStorage();
  inputTransactionName.value ='';
  inputTransactionAmount.value ='';
 });
