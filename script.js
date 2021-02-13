@@ -3,7 +3,21 @@ const transactionUL = document.querySelector('#transactions')//recupera a ul da 
 const incomeDisplay = document.querySelector('#money-plus')//pega o p da dom para mostra a receita
 const expenseDisplay = document.querySelector('#money-minus')//pega o p da dom para mostra a despesas
 const balanceDisplay = document.querySelector('#balance')//pega o h1 da dom para mostra o saldo total
-console.log({incomeDisplay, expenseDisplay,balanceDisplay})
+const form = document.querySelector('#form'); //pega o id do form 
+const inputTransactionName = document.querySelector('#text')//pega o id do imput
+const inputTransactionAmount = document.querySelector('#amount')
+//const data = new Date();
+// const datas = {
+//     mes: data.getMonth(),
+//     dia: data.getDay(),
+//     hora: data.getHours(),
+//     minutos: data.getMinutes()
+
+// }
+// var dias = new Array(
+//     'domingo','segunda','terça','quarta','quinta','sexta','sábado'
+//    );
+// console.log(dias[datas.dia])
 const dummyTransactions = [
     {id:1, nome: 'Bolo de brigadeiro',amount:-20},
     {id:2, nome: 'Salário',amount:300},
@@ -23,9 +37,9 @@ const addtransactionIntoDom = transaction =>{
     //add a span na li
     li.innerHTML =`
     ${transaction.nome} <span> ${operator} R$ ${amountWithoutOperator}</span><button class="delete-btn">x</button>`;
-    transactionUL.append(li);//inserido a li na dom
-    //append coloca o ultimo elememto inserido como o primeiro filho
-    //prepend coloca o ultimo elemento inserido como o ultimo filho
+    transactionUL.prepend(li);//inserido a li na dom
+    //append coloca o ultimo elememto inserido como o ultimo filho
+    //prepend coloca o ultimo elemento inserido como o primeiro filho
     
 }
 const updateBalanceValues = () =>{
@@ -45,12 +59,35 @@ const updateBalanceValues = () =>{
            balanceDisplay.textContent =`R$ ${total}`;
            incomeDisplay.textContent = `R$ ${income}`;
            expenseDisplay.textContent =`R$ ${Math.abs(expense)}`;
-    console.log(expense)
+   
 
 }
  const init = () =>{
+    transactionUL.innerHTML ='';
      dummyTransactions.forEach(addtransactionIntoDom);
      updateBalanceValues()
  }
 //responsavél para inicializar os dados na tela
-init()
+init();
+const generateID = ()=> Math.round(Math.random() * 1000);
+
+//evento que vai ouvir o form e fazer a validação dele
+form.addEventListener('submit', event =>{
+ event.preventDefault()
+ const transactionName = inputTransactionName.value.trim();
+ const transactionAmount = inputTransactionAmount.value.trim();
+
+ if( transactionName ==='' || transactionAmount ===''){
+     alert('Por favor, preenche  tanto o nome quando o valor da transação')
+     return
+ }
+ const transaction = {
+     id: generateID(), 
+     nome: transactionName ,
+     amount: Number(transactionAmount)//transformando a string que vem do form em numero poderia ser o sinal de +
+    };
+ dummyTransactions.push(transaction);
+ init()   
+ inputTransactionName.value ='';
+ inputTransactionAmount.value ='';
+});
