@@ -18,12 +18,17 @@ const inputTransactionAmount = document.querySelector('#amount')
 //     'domingo','segunda','terça','quarta','quinta','sexta','sábado'
 //    );
 // console.log(dias[datas.dia])
-const dummyTransactions = [
+let dummyTransactions = [
     {id:1, nome: 'Bolo de brigadeiro',amount:-20},
     {id:2, nome: 'Salário',amount:300},
     {id:3, nome: 'Torta de frango',amount:-10},
     {id:4, nome: 'Violão',amount:150}
 ]
+const removeTransaction = ID =>{
+    dummyTransactions = dummyTransactions.filter(transaction => transaction.id !== ID)
+    init()
+   
+}
 const addtransactionIntoDom = transaction =>{
     //add sinal de mais ou menos de acordo com o valor  da propriedade amount do obj passdo no parametro 
     const operator = transaction.amount < 0 ? '-' : '+';
@@ -36,7 +41,11 @@ const addtransactionIntoDom = transaction =>{
     li.classList.add(CSSClass);//add a class na li
     //add a span na li
     li.innerHTML =`
-    ${transaction.nome} <span> ${operator} R$ ${amountWithoutOperator}</span><button class="delete-btn">x</button>`;
+        ${transaction.nome} 
+        <span> ${operator} R$ ${amountWithoutOperator}</span>
+        <button class="delete-btn" onClick="removeTransaction(${transaction.id})">
+        x
+        </button>`;
     transactionUL.prepend(li);//inserido a li na dom
     //append coloca o ultimo elememto inserido como o ultimo filho
     //prepend coloca o ultimo elemento inserido como o primeiro filho
