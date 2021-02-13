@@ -22,11 +22,17 @@ const addtransactionIntoDom = transaction =>{
     transactionUL.append(li);//inserido a li na dom
     //append coloca o ultimo elememto inserido como o primeiro filho
     //prepend coloca o ultimo elemento inserido como o ultimo filho
-    console.log(transactionUL)
+    
+}
+const updateBalanceValues = () =>{
+    const transactonsAmounts = dummyTransactions.map(transaction => transaction.amount);
+    const total = transactonsAmounts.reduce((accumulator, transaction) => accumulator + transaction,0).toFixed(2)
+    console.log(total)
 
 }
  const init = () =>{
-     dummyTransactions.forEach(addtransactionIntoDom)
+     dummyTransactions.forEach(addtransactionIntoDom);
+     updateBalanceValues()
  }
 //responsavél para inicializar os dados na tela
 init()
